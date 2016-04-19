@@ -9,6 +9,10 @@ public class Exercicio2 {
 
     public static void main(String[] args) throws IOException {
         String nomeArquivo = args[0];
+        if(nomeArquivo == null || nomeArquivo.equals("")){
+            System.out.println("Falta o nome do arquivo!");
+            System.exit(0);
+        }
         System.out.println("Lendo do arquivo: " + nomeArquivo);
         FileInputStream fis = new FileInputStream(nomeArquivo);
         InputStreamReader isr = new InputStreamReader(fis, "UTF-8");
