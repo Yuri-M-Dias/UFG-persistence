@@ -49,12 +49,17 @@ public class Exercicio5 {
         //Escreve pro dest
         FileOutputStream fos = new FileOutputStream(arquivoDestino);
         DataOutputStream dos = new DataOutputStream(fos);
-        dos.writeLong(numeroLinhas);
+        //dos.writeLong(numeroLinhas);
         //Lambdas são legais! dois loops? Um para fazer o index, outro para
+        //index : {total_linhas}{pos_l1}{pos_l2}{index_l1}{len_l1}{l1}{index_l2}
+        // {len_l2}{l2}
+        //Escreve o index
+
         lineToByte.forEach(eachLine -> {
             try {
-                dos.writeInt(eachLine.getSize());
-                dos.write(eachLine.getBytes());
+                //dos.write(dos.size());// Bytes escritos até então, index linha
+                dos.writeInt(eachLine.getSize());// Tamanho da linha
+                dos.write(eachLine.getBytes());// Conteúdo da linha
             } catch (IOException e) {
                 e.printStackTrace();
             }
