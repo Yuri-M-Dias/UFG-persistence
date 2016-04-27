@@ -1,5 +1,7 @@
 package yuri.m.dias;
 
+import org.omg.CORBA.INTERNAL;
+
 import java.io.DataInputStream;
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -18,14 +20,18 @@ public class Exercicio6 {
         }
         FileInputStream fis = new FileInputStream(arquivoFonte);
         DataInputStream dis = new DataInputStream(fis);
-        Integer currentLineSize = dis.readInt();//first line
+        //Primeiro int, com o começo do arquivo
+        int quantidadeLinhas = dis.readInt();
+        dis.skipBytes(quantidadeLinhas - 4);
+        //Ignorou o index
+        Integer currentLineSize = dis.readInt();//current line size
         while (currentLineSize != -1) {
             byte[] readBytes = new byte[currentLineSize];//Reads size
             dis.read(readBytes, 0, currentLineSize);//Reads content
             String linha = new String(readBytes, "UTF-8");//converts
             System.out.println(linha);
             if(dis.available() > 0){
-              currentLineSize = dis.readInt();
+                currentLineSize = dis.readInt();
             } else{
                 currentLineSize = -1;
             }

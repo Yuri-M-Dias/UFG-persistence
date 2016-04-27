@@ -43,21 +43,29 @@ public class Exercicio5 {
             }
             System.out.println(check + " =? " + linha);
         }
-        long numeroLinhas = lineToByte.size();
         br.close();
 
         //Escreve pro dest
         FileOutputStream fos = new FileOutputStream(arquivoDestino);
         DataOutputStream dos = new DataOutputStream(fos);
-        //dos.writeLong(numeroLinhas);
-        //Lambdas são legais! dois loops? Um para fazer o index, outro para
-        //index : {total_linhas}{pos_l1}{pos_l2}{index_l1}{len_l1}{l1}{index_l2}
-        // {len_l2}{l2}
-        //Escreve o index
 
+        //index : {começo_arquivo*4}{pos_len_1}{pos_len_l2}{len_l1}{l1
+        // }{len_l2}{l2}
+        int numeroLinhas = lineToByte.size();
+        int[] index = new int[numeroLinhas + 1];
+        //Posição final do index, e começo do arquivo de fato
+        index[0] = numeroLinhas * Integer.BYTES;
+        for (int i = 0; i < numeroLinhas; i++) {
+            //tamanho atual + tamanho da linha atual + int offset
+            int tamanhoDaLinha = lineToByte.get(i).getSize();
+            //Faz o próximo
+            index[i+1] = index[i] + tamanhoDaLinha + Integer.BYTES;
+            //Escreve o atual no arquivo
+            dos.writeInt(index[i]);
+        }
+        //Escreve o conteúdo do arquivo em si, final do index
         lineToByte.forEach(eachLine -> {
             try {
-                //dos.write(dos.size());// Bytes escritos até então, index linha
                 dos.writeInt(eachLine.getSize());// Tamanho da linha
                 dos.write(eachLine.getBytes());// Conteúdo da linha
             } catch (IOException e) {
