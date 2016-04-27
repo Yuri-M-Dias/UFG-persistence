@@ -1,7 +1,6 @@
 package yuri.m.dias;
 
-import java.io.IOException;
-import java.io.InterruptedIOException;
+import java.io.*;
 
 /**
  * Created by Yuri on 26-Apr-16.
@@ -18,8 +17,29 @@ public class Exercicio7 {
             System.exit(0);
         }
         Integer linha = Integer.parseInt(linhaDestino);
-        //TODO: this!
-        System.out.println("Lendo do arquivo: " + arquivoFonte);
-
+        if (linha < 0) {
+            System.out.println("Linha negativa não existe!");
+            System.exit(0);
+        }
+        FileInputStream fis = new FileInputStream(arquivoFonte);
+        DataInputStream dis = new DataInputStream(fis);
+        try {
+            dis.skipBytes((linha - 1) * Integer.BYTES);
+            int posicaoLinha = dis.readInt();
+            dis.skipBytes(posicaoLinha - (Integer.BYTES * linha));
+            int qtdBytesLinha = dis.readInt();
+            byte[] readBytes = new byte[qtdBytesLinha];//Reads size
+            int numBytesLidos = dis.read(readBytes, 0, qtdBytesLinha);
+            if (numBytesLidos != qtdBytesLinha) {
+                System.out.println("Erro na leitura!");
+                System.exit(0);
+            }
+            String linhaResultado = new String(readBytes, "UTF-8");
+            System.out.println(linhaResultado);
+        } catch (EOFException e) {
+            System.out.println("Linha não encontrada!");
+        } finally {
+            dis.close();
+        }
     }
 }
