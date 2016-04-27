@@ -21,8 +21,9 @@ public class Exercicio6 {
         FileInputStream fis = new FileInputStream(arquivoFonte);
         DataInputStream dis = new DataInputStream(fis);
         //Primeiro int, com o começo do arquivo
-        int quantidadeLinhas = dis.readInt();
-        dis.skipBytes(quantidadeLinhas - 4);
+        int quantidadeBytesLinhas = dis.readInt();
+        //offsets for the first int
+        dis.skipBytes(quantidadeBytesLinhas - Integer.BYTES);
         //Ignorou o index
         Integer currentLineSize = dis.readInt();//current line size
         while (currentLineSize != -1) {
